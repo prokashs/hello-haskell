@@ -1,0 +1,941 @@
+
+Great 👍 — now that **Stack works**, let’s finish the **IntelliJ + Haskell setup** cleanly.
+
+I’ll assume:
+
+* Windows
+* IntelliJ IDEA
+* Stack project (`hello-haskell`)
+* GHC via `ghcup`
+* HLS installed (wrapper works)
+
+---
+
+# ✅ Step-by-Step: IntelliJ Haskell Setup (Windows)
+
+---
+
+## 1️⃣ Install IntelliJ Haskell plugin
+
+1. **IntelliJ IDEA → File → Settings**
+2. **Plugins → Marketplace**
+3. Search: **Haskell**
+4. Install **“Haskell”** (by JetBrains / IntelliJ-Haskell)
+5. **Restart IntelliJ**
+
+---
+
+## 2️⃣ Open your Stack project correctly
+
+1. **File → Open**
+2. Select the **project root**:
+
+   ```
+   D:\hello-haskell
+   ```
+
+   (must contain `stack.yaml`)
+3. Choose **Open as Project**
+
+✔ IntelliJ should detect a **Stack project**
+
+---
+
+## 3️⃣ Configure Haskell SDK (critical)
+
+1. `File → Settings → Languages & Frameworks → Haskell`
+2. Set:
+
+| Setting                | Value                    |
+| ---------------------- | ------------------------ |
+| **Haskell Tool Stack** | `Stack`                  |
+| **Stack executable**   | `C:\ghcup\bin\stack.exe` |
+| **GHC**                | Auto-detected            |
+| **Enable HLS**         | ✅ checked                |
+
+3. Click **Apply**
+
+---
+
+## 4️⃣ Verify HLS is detected
+
+Still in **Haskell settings**, look for:
+
+```
+Haskell Language Server: Detected
+```
+
+If not:
+
+* Path should be:
+
+  ```
+  C:\ghcup\bin\haskell-language-server-wrapper.exe
+  ```
+
+---
+
+## 5️⃣ Enable IntelliJ indexing (first time only)
+
+1. Open `src/Main.hs`
+2. Wait 1–2 minutes (first index is slow)
+3. You should see:
+
+   * Syntax highlighting
+   * Type info on hover
+   * No red squiggles
+
+If prompted:
+
+> “Load Stack project?” → **Yes**
+
+---
+
+## 6️⃣ Create Run Configuration (▶ button)
+
+1. Top right → **Add Configuration…**
+2. **+ → Haskell**
+3. Set:
+
+| Field             | Value              |
+| ----------------- | ------------------ |
+| Name              | `hello-haskell`    |
+| Run kind          | `Stack`            |
+| Command           | `run`              |
+| Working directory | `D:\hello-haskell` |
+
+4. **Apply → OK**
+
+Now you can press **▶ Run**
+
+---
+
+## 7️⃣ Test from IntelliJ Terminal
+
+Open terminal (`Alt + F12`) and run:
+
+```powershell
+stack build
+stack run
+```
+
+Expected:
+
+```
+Hello, Haskell!
+```
+
+---
+
+## 8️⃣ Common fixes (if something looks wrong)
+
+### 🔧 Red errors everywhere?
+
+```powershell
+stack build
+```
+
+Then **Invalidate Caches**:
+
+```
+File → Invalidate Caches → Restart
+```
+
+---
+
+### 🔧 HLS not starting?
+
+Run once manually:
+
+```powershell
+haskell-language-server-wrapper --debug
+```
+
+Then restart IntelliJ.
+
+---
+
+## ✅ Final checklist
+
+✔ GHC detected
+✔ Stack builds
+✔ HLS working
+✔ IntelliJ Run button works
+✔ Terminal works
+
+---
+
+If you want next, I can:
+
+* Set up **multi-module project**
+* Add **Hspec tests**
+* Explain **Stack vs Cabal vs GHCup**
+* Tune IntelliJ for **large Haskell codebases**
+
+Just tell me 👍
+
+
+Excellent 👍
+Since **Stack + IntelliJ + HLS are working**, let’s do **multi-module Haskell the *right* way** (idiomatic, IDE-friendly).
+
+I’ll assume your project root is:
+
+```
+D:\hello-haskell
+```
+
+---
+
+# 🧩 Haskell Multi-Module Project (Stack)
+
+## 1️⃣ Default single-module layout (what you have now)
+
+```text
+hello-haskell/
+├─ app/
+│  └─ Main.hs
+├─ src/
+│  └─ Lib.hs
+├─ hello-haskell.cabal
+├─ package.yaml
+└─ stack.yaml
+```
+
+We’ll **add modules**, not break anything.
+
+---
+
+## 2️⃣ Create new module files
+
+### Example: add `MathUtils` and `TextUtils`
+
+Create these files:
+
+```text
+src/
+├─ Lib.hs
+├─ MathUtils.hs
+└─ TextUtils.hs
+```
+
+---
+
+## 3️⃣ Write the modules
+
+### 📄 `src/MathUtils.hs`
+
+```haskell
+module MathUtils
+  ( add
+  , square
+  ) where
+
+add :: Int -> Int -> Int
+add x y = x + y
+
+square :: Int -> Int
+square x = x * x
+```
+
+---
+
+### 📄 `src/TextUtils.hs`
+
+```haskell
+module TextUtils
+  ( shout
+  ) where
+
+import Data.Char (toUpper)
+
+shout :: String -> String
+shout = map toUpper
+```
+
+---
+
+## 4️⃣ Use them from `Main.hs`
+
+### 📄 `app/Main.hs`
+
+```haskell
+module Main where
+
+import MathUtils
+import TextUtils
+
+main :: IO ()
+main = do
+  print (add 2 3)
+  print (square 4)
+  putStrLn (shout "hello haskell")
+```
+
+---
+
+## 5️⃣ Tell Stack/Cabal about new modules
+
+Because you’re using **package.yaml**, this is easy.
+
+### 📄 `package.yaml`
+
+Find the `library:` section and make sure **source-dirs** is set:
+
+```yaml
+library:
+  source-dirs: src
+```
+
+👉 **You do NOT need to list modules manually** unless you want to restrict exports.
+
+Stack will auto-discover:
+
+* `Lib`
+* `MathUtils`
+* `TextUtils`
+
+---
+
+## 6️⃣ Build and run
+
+From **IntelliJ terminal**:
+
+```powershell
+stack build
+stack run
+```
+
+Expected output:
+
+```
+5
+16
+HELLO HASKELL
+```
+
+---
+
+## 7️⃣ IntelliJ / HLS behavior (what to expect)
+
+✔ Auto-import suggestions
+✔ Jump to definition (Ctrl+Click)
+✔ Type hover
+✔ Rename symbol works across modules
+
+If IntelliJ doesn’t pick it up immediately:
+
+```
+File → Invalidate Caches → Restart
+```
+
+---
+
+## 8️⃣ Nested modules (real-world layout)
+
+For larger projects:
+
+```text
+src/
+├─ Lib.hs
+├─ Math/
+│  ├─ Basic.hs
+│  └─ Advanced.hs
+└─ Text/
+   └─ Utils.hs
+```
+
+### Example module header:
+
+```haskell
+module Math.Basic where
+```
+
+Import it as:
+
+```haskell
+import Math.Basic
+```
+
+---
+
+## 9️⃣ Exposing modules (advanced but important)
+
+In `package.yaml` (optional but recommended later):
+
+```yaml
+library:
+  source-dirs: src
+  exposed-modules:
+    - Lib
+    - MathUtils
+    - TextUtils
+```
+
+This controls what **other packages** can import.
+
+---
+
+## 10️⃣ Tests (next natural step)
+
+Add:
+
+```text
+test/
+└─ Spec.hs
+```
+
+Use **Hspec** and import your modules normally.
+
+---
+
+## ✅ Mental model (important)
+
+| Concept       | Meaning                |
+| ------------- | ---------------------- |
+| File name     | Must match module name |
+| Folder        | Namespace              |
+| `source-dirs` | Root of module tree    |
+| `import X.Y`  | `src/X/Y.hs`           |
+
+---
+
+If you want next, I can:
+
+* Add **Hspec test suite**
+* Show **multiple executables**
+* Explain **library vs app separation**
+* Convert to **Cabal-only workflow**
+
+You’re now using Haskell like a pro 🚀
+
+
+Perfect 👍 — that’s a very reasonable expectation.
+Let me show you **how to do the *same multi-module setup using only IntelliJ IDEA*** (no manual terminal work, except running).
+
+I’ll be precise and IDE-centric.
+
+---
+
+# 🧠 Key idea (IntelliJ + Haskell)
+
+IntelliJ **does not have a “New Haskell Module” wizard** like Java, but:
+
+* **Creating files in the IDE is the correct workflow**
+* Stack/Cabal **auto-detect modules**
+* HLS + IntelliJ handle imports automatically
+
+So “IDE-only” means:
+✔ create files in Project view
+✔ let IntelliJ generate imports
+✔ use Run ▶ button
+
+---
+
+# 🧩 Multi-Module Project — IDE-Only Workflow
+
+---
+
+## 1️⃣ Create a new module (IDE only)
+
+### In IntelliJ:
+
+1. Open **Project tool window** (Alt + 1)
+2. Right-click `src`
+3. **New → File**
+4. Name:
+
+   ```
+   MathUtils.hs
+   ```
+
+👉 No terminal involved.
+
+---
+
+## 2️⃣ Let IntelliJ scaffold the module
+
+Paste this into the editor:
+
+```haskell
+module MathUtils where
+
+add :: Int -> Int -> Int
+add x y = x + y
+```
+
+✔ IntelliJ syntax highlights immediately
+✔ File name matches module name (important)
+
+---
+
+## 3️⃣ Create another module (same way)
+
+**New → File → `TextUtils.hs`**
+
+```haskell
+module TextUtils where
+
+import Data.Char (toUpper)
+
+shout :: String -> String
+shout = map toUpper
+```
+
+---
+
+## 4️⃣ Use modules from `Main.hs` (IDE assists)
+
+Open `app/Main.hs`.
+
+Type:
+
+```haskell
+add 2 3
+```
+
+You’ll get a **red underline**.
+
+👉 Press **Alt + Enter**
+👉 Choose **Import MathUtils**
+
+IntelliJ inserts:
+
+```haskell
+import MathUtils
+```
+
+Do the same for `TextUtils`.
+
+---
+
+## 5️⃣ Final `Main.hs` (edited in IDE only)
+
+```haskell
+module Main where
+
+import MathUtils
+import TextUtils
+
+main :: IO ()
+main = do
+  print (add 2 3)
+  putStrLn (shout "hello ide")
+```
+
+No terminal used so far.
+
+---
+
+## 6️⃣ Build & Run using IntelliJ ▶
+
+### Option A: Run button (preferred)
+
+* Top-right ▶ **Run `hello-haskell`**
+* Output appears in **Run tool window**
+
+### Option B: IntelliJ Terminal (still inside IDE)
+
+`Alt + F12` → run:
+
+```powershell
+stack run
+```
+
+---
+
+## 7️⃣ IntelliJ keeps everything in sync automatically
+
+You **do NOT** need to:
+
+* edit `package.yaml` for each module
+* list modules manually
+* refresh project manually
+
+Stack + HLS handle this.
+
+---
+
+## 8️⃣ Nested modules (IDE-only)
+
+### Create folder structure in IDE
+
+1. Right-click `src`
+2. **New → Directory → Math**
+3. Inside `Math`, **New → File → Basic.hs**
+
+### IntelliJ file contents:
+
+```haskell
+module Math.Basic where
+
+double :: Int -> Int
+double x = x * 2
+```
+
+### Import via Alt+Enter:
+
+```haskell
+import Math.Basic
+```
+
+---
+
+## 9️⃣ Refactoring tools (IDE power)
+
+| Action             | Shortcut       |
+| ------------------ | -------------- |
+| Rename module/file | Shift + F6     |
+| Auto-import        | Alt + Enter    |
+| Go to definition   | Ctrl + Click   |
+| Find usages        | Alt + F7       |
+| Reformat           | Ctrl + Alt + L |
+
+All IDE-only.
+
+---
+
+## 10️⃣ What IntelliJ does *not* do (by design)
+
+❌ Auto-create `module` header
+❌ “New Haskell Module” wizard
+
+This is a known limitation of the plugin — not your setup.
+
+---
+
+## ✅ Bottom line
+
+✔ Creating files = creating modules
+✔ IntelliJ + HLS handle imports
+✔ Stack auto-discovers modules
+✔ You never need to touch config for normal cases
+✔ IDE workflow is fully supported
+
+---
+
+If you want, next I can show **IDE-only**:
+
+* Hspec test setup
+* Multiple executables
+* Library-only projects
+* Refactoring a module tree safely
+
+You’re set up *correctly* — this is how Haskell is done in IntelliJ 👍
+
+
+Great question — this is a **core Haskell concept**, and once it clicks, multi-module projects become much clearer.
+
+---
+
+## What does this mean?
+
+```haskell
+module BinaryTree.BinaryTree where
+```
+
+This line declares a **module name**.
+
+### Breakdown
+
+| Part                    | Meaning                       |
+| ----------------------- | ----------------------------- |
+| `module`                | Start of a module declaration |
+| `BinaryTree.BinaryTree` | Fully qualified module name   |
+| `where`                 | Definitions follow            |
+
+---
+
+## How module names map to files and folders
+
+In Haskell, **module names correspond to directory structure**.
+
+### This module declaration:
+
+```haskell
+module BinaryTree.BinaryTree where
+```
+
+**MUST** live in a file at:
+
+```text
+src/BinaryTree/BinaryTree.hs
+```
+
+Because:
+
+```
+BinaryTree.BinaryTree
+└────────┬────────┘
+         └── file name
+└──────────── directory
+```
+
+---
+
+## Why would someone write this?
+
+Usually for **namespacing** and **organization**.
+
+### Example project layout
+
+```text
+src/
+└─ BinaryTree/
+   ├─ BinaryTree.hs
+   ├─ Insert.hs
+   └─ Traversal.hs
+```
+
+```haskell
+-- src/BinaryTree/BinaryTree.hs
+module BinaryTree.BinaryTree where
+```
+
+```haskell
+-- src/BinaryTree/Insert.hs
+module BinaryTree.Insert where
+```
+
+```haskell
+-- src/BinaryTree/Traversal.hs
+module BinaryTree.Traversal where
+```
+
+Now you can write:
+
+```haskell
+import BinaryTree.BinaryTree
+import BinaryTree.Insert
+import BinaryTree.Traversal
+```
+
+This keeps everything grouped under `BinaryTree`.
+
+---
+
+## Is `BinaryTree.BinaryTree` redundant?
+
+Yes — often it is.
+
+Most Haskell code would prefer:
+
+```haskell
+module BinaryTree where
+```
+
+located at:
+
+```text
+src/BinaryTree.hs
+```
+
+### When duplication is used intentionally
+
+`X.X` is sometimes used when:
+
+* The folder represents a **package-like namespace**
+* The file is the **main API** for that folder
+* Submodules exist
+
+This mirrors patterns from:
+
+* Java (`com.foo.foo`)
+* Rust (`mod.rs` style)
+* OCaml
+
+---
+
+## Common, cleaner alternatives (recommended)
+
+### ✅ Option 1: Flat module
+
+```haskell
+-- src/BinaryTree.hs
+module BinaryTree where
+```
+
+Simple and clean.
+
+---
+
+### ✅ Option 2: Namespaced modules (preferred for larger projects)
+
+```text
+src/
+└─ BinaryTree/
+   ├─ Types.hs
+   ├─ Insert.hs
+   └─ Traversal.hs
+```
+
+```haskell
+module BinaryTree.Types where
+module BinaryTree.Insert where
+module BinaryTree.Traversal where
+```
+
+No duplication.
+
+---
+
+## How to import it
+
+```haskell
+import BinaryTree.BinaryTree
+```
+
+or with alias:
+
+```haskell
+import qualified BinaryTree.BinaryTree as BT
+```
+
+---
+
+## IntelliJ / Stack rules to remember
+
+| Rule             | Must be true                |
+| ---------------- | --------------------------- |
+| Folder structure | Matches module name         |
+| File name        | Matches last module segment |
+| Case             | Exact match                 |
+| `source-dirs`    | Includes `src`              |
+
+If any of these mismatch → Stack build error.
+
+---
+
+## TL;DR
+
+```haskell
+module BinaryTree.BinaryTree where
+```
+
+Means:
+
+> “This file defines module `BinaryTree.BinaryTree`,
+> and it must live at `src/BinaryTree/BinaryTree.hs`.”
+
+It’s **legal**, but often **unnecessary** unless you’re building a structured namespace.
+
+---
+
+If you want, I can:
+
+* Refactor your current tree modules to a clean layout
+* Explain how **exports** work (`module X (..) where`)
+* Show a real-world **BinaryTree implementation** using this structure
+
+Just tell me 👍
+Ah, now I understand — your `BinaryTree` module has:
+
+```haskell
+module BinaryTree where
+
+import qualified Data.List as L
+```
+
+but then **when you try to use `L.sort` from `Main.hs`** you get:
+
+```
+Not in scope: 'L.sort'
+NB: no module named 'L' is imported.
+```
+
+---
+
+## Why this happens
+
+In Haskell:
+
+* **Imports are *local to the module***.
+* If you `import qualified Data.List as L` **inside `BinaryTree.hs`**, it only exists **inside `BinaryTree.hs`**.
+* Any other module (like `Main.hs`) **cannot see `L` automatically**.
+
+---
+
+## How to use `Data.List` in `Main.hs`
+
+You have **two options**:
+
+### 1️⃣ Import in each module where you need it
+
+```haskell
+-- app/Main.hs
+import qualified Data.List as L
+import BinaryTree
+
+main :: IO ()
+main = print (L.sort [3,1,2])
+```
+
+✅ Recommended for clarity — every module declares what it uses.
+
+---
+
+### 2️⃣ Re-export `Data.List` through `BinaryTree` (less common)
+
+If you want `Main` to see `L.sort` from `BinaryTree`:
+
+```haskell
+-- src/BinaryTree.hs
+module BinaryTree
+  ( sortList
+  ) where
+
+import qualified Data.List as L
+
+sortList :: Ord a => [a] -> [a]
+sortList = L.sort
+```
+
+Then in `Main.hs`:
+
+```haskell
+import BinaryTree
+
+main :: IO ()
+main = print (sortList [3,1,2])
+```
+
+✅ This hides the qualified import inside `BinaryTree` and exposes only what you want.
+
+---
+
+### ✅ Key Rule
+
+> `import` statements **do not leak to other modules**.
+> Each module must **import what it directly uses**, or explicitly re-export functions.
+
+---
+
+So, in your case:
+
+* If you want to call `L.sort` in `Main.hs` → **import qualified Data.List as L** in `Main.hs`.
+* If you only call `L.sort` **inside BinaryTree.hs** → keep the import there; `Main.hs` does **not** need `L`.
+
+---
+
+If you want, I can rewrite your **BinaryTree + Main.hs** files so that:
+
+* BinaryTree has internal functions using `Data.List`
+* Main can use them without needing to import `Data.List` itself
+
+This will be **fully IDE-ready for IntelliJ**.
+
+Do you want me to do that?
+
+You’re welcome! 😄
+
+Now you have the full mental model:
+
+* Each Haskell module imports what it **needs**.
+* Qualified imports like `import qualified Data.List as L` are **module-local**.
+* Multi-module projects in IntelliJ work best when each file/module declares its imports explicitly.
+* Stack + HLS + IntelliJ handle the rest automatically.
+
+Your **BinaryTree module + Main** setup should now work smoothly in IntelliJ with Stack.
+
+If you want, I can also show a **ready-to-run multi-module Haskell project ZIP** with `BinaryTree`, `MathUtils`, `Main`, and `qualified imports` configured — fully IDE-ready.
+
+Do you want me to prepare that?
