@@ -1,0 +1,161 @@
+Short answer: **yes, but not as the dominant languages**.
+
+Haskell and ML-family languages *are used in AI*, but mostly in **research, foundations, and specialized systems**, not in mainstream production AI like PyTorch/TensorFlow pipelines.
+
+Let’s break it down clearly.
+
+---
+
+## 1️⃣ What languages dominate AI in practice?
+
+### **Production & mainstream AI**
+
+* **Python** → *by far #1*
+
+  * PyTorch, TensorFlow, JAX, Hugging Face
+* **C++ / CUDA**
+
+  * performance-critical kernels
+* **Rust / Go**
+
+  * infrastructure, serving, safety tooling (growing fast)
+
+These dominate because of **ecosystem + hardware support**, not because they’re ideal languages.
+
+---
+
+## 2️⃣ Where Haskell *is* used in AI
+
+Haskell appears mainly in:
+
+### 🧠 **Research & theory-heavy AI**
+
+* probabilistic programming
+* symbolic AI
+* program synthesis
+* formal verification of models
+* differentiable programming research
+
+Examples:
+
+* **Probabilistic programming** (e.g. monads, compositional models)
+* **Automatic differentiation** (clean functional formulations)
+* **DSLs for ML** embedded in Haskell
+
+Why Haskell fits:
+
+* strong static typing
+* purity → easy reasoning
+* higher-order abstractions
+* equational reasoning
+
+But…
+
+❌ Limited GPU ecosystem
+❌ Fewer ready-to-use ML libraries
+❌ Harder onboarding for teams
+
+So it stays **niche but influential**.
+
+---
+
+## 3️⃣ ML-family languages (OCaml, Standard ML, F#)
+
+### Where they show up:
+
+#### 🔬 **Research labs & compilers**
+
+* model checking
+* symbolic reasoning
+* theorem provers
+* language-based AI tools
+
+#### 🧪 **Notable examples**
+
+* **OCaml**
+
+  * used at Jane Street (quant + ML infra)
+  * Facebook (Flow, Infer – not AI models, but AI-adjacent tooling)
+* **F#**
+
+  * ML.NET
+  * data science on .NET
+* **Standard ML**
+
+  * mostly academic, language research
+
+ML languages influenced AI *far more than they are used directly*.
+
+---
+
+## 4️⃣ The *hidden influence*: ML languages shaped modern AI
+
+This is the important part.
+
+Many AI ideas **come from functional & ML languages**:
+
+| AI concept                | Origin                   |
+| ------------------------- | ------------------------ |
+| Automatic differentiation | functional programming   |
+| Computation graphs        | functional ASTs          |
+| JAX-style transformations | ML / Haskell ideas       |
+| Type-safe tensor DSLs     | ML-style type systems    |
+| Effect systems            | Haskell / OCaml research |
+
+Example:
+
+* **JAX** is basically *Haskell ideas implemented in Python*
+* PyTorch’s autograd mirrors **functional differentiation**
+
+So even if AI *runs in Python*, the **thinking is functional**.
+
+---
+
+## 5️⃣ Why Python still wins
+
+Despite weaknesses, Python wins because:
+
+* massive GPU + vendor support
+* fastest research iteration
+* huge pretrained model ecosystem
+* easy onboarding
+
+AI research values **speed of experimentation** over language purity.
+
+---
+
+## 6️⃣ Where Haskell / ML may grow in AI
+
+They’re gaining traction in:
+
+* **AI safety & verification**
+* **correctness of ML systems**
+* **compiler-based ML** (XLA, MLIR-style systems)
+* **symbolic + neural hybrid AI**
+* **DSLs for training / inference**
+
+Rust is currently benefiting the most from these ideas in production.
+
+---
+
+## 🔑 Bottom line
+
+* **Yes**, Haskell and ML languages are used in AI
+* **No**, they are not mainstream for training large models
+* **Yes**, they heavily influence how AI systems are designed
+* **Yes**, they shine in correctness, theory, and tooling
+
+If you’re coming from **Haskell / systems background** (which you clearly are), you’re actually *well-positioned* for:
+
+* AI infrastructure
+* ML compilers
+* safety-critical AI
+* research roles
+
+If you want, I can map:
+
+* **Haskell → AI paths**
+* **ML concepts → PyTorch/JAX equivalents**
+* **Which AI areas reward strong type theory**
+
+Just say the word.
