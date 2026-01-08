@@ -1,0 +1,247 @@
+Perfect! Let’s make a **side-by-side functional programming comparison** across **Haskell, Scala, Rust, and C++**, using **immutable sort, map/filter, recursion, and chaining**.
+
+I’ll keep it concise, highlighting the FP style idioms.
+
+---
+
+# 1️⃣ Immutable sort
+
+### **Haskell**
+
+```haskell
+let xs = [3,1,2]
+let sorted_xs = sort xs  -- Data.List.sort, immutable
+```
+
+* `xs` is immutable by default
+* `sort xs` returns a new list
+
+---
+
+### **Scala**
+
+```scala
+val xs = List(3,1,2)
+val sorted_xs = xs.sorted  // immutable List, returns new List
+```
+
+* `List` is immutable
+* `sorted` returns a new list
+* Works like Haskell’s `sort`
+
+---
+
+### **Rust**
+
+```rust
+fn sorted(x: &[i32]) -> Vec<i32> {
+    let mut v = x.to_vec(); // copy input
+    v.sort();
+    v
+}
+
+let xs = vec![3,1,2];
+let sorted_xs = sorted(&xs); // immutable externally
+```
+
+* `Vec` is mutable internally
+* Ownership and borrowing prevent external mutation
+
+---
+
+### **C++**
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+std::vector<int> sorted(const std::vector<int>& xs) {
+    std::vector<int> v = xs; // copy input
+    std::sort(v.begin(), v.end());
+    return v;                 // immutable externally
+}
+
+std::vector<int> xs = {3,1,2};
+auto sorted_xs = sorted(xs);
+```
+
+* Manual copy ensures immutability outside the function
+
+---
+
+# 2️⃣ Map / filter (squares and evens)
+
+### **Haskell**
+
+```haskell
+let xs = [1..5]
+let squares = map (^2) xs
+let evens = filter even squares
+```
+
+* All immutable, functional, lazy if needed
+
+---
+
+### **Scala**
+
+```scala
+val xs = List(1,2,3,4,5)
+val squares = xs.map(x => x*x)
+val evens = squares.filter(_ % 2 == 0)
+```
+
+* Immutable, functional style, eager by default
+
+---
+
+### **Rust**
+
+```rust
+let xs = vec![1,2,3,4,5];
+let squares: Vec<i32> = xs.iter().map(|x| x*x).collect();
+let evens: Vec<i32> = squares.into_iter().filter(|x| x % 2 == 0).collect();
+```
+
+* `iter()` + `map()` + `filter()`
+* Returns new vectors each step
+
+---
+
+### **C++**
+
+```cpp
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+std::vector<int> xs = {1,2,3,4,5};
+std::vector<int> squares(xs.size());
+std::transform(xs.begin(), xs.end(), squares.begin(), [](int x){ return x*x; });
+
+std::vector<int> evens;
+std::copy_if(squares.begin(), squares.end(), std::back_inserter(evens), [](int x){ return x % 2 == 0; });
+```
+
+* Mutable by default, need explicit copies
+* Functional style achievable, but verbose
+
+---
+
+# 3️⃣ Recursive factorial
+
+### **Haskell**
+
+```haskell
+factorial 0 = 1
+factorial n = n * factorial (n-1)
+```
+
+* Pure, immutable, expression-oriented
+
+---
+
+### **Scala**
+
+```scala
+def factorial(n: Int): Int = n match {
+  case 0 => 1
+  case _ => n * factorial(n-1)
+}
+```
+
+* Pure if you avoid side effects
+* Tail recursion requires `@tailrec` annotation if optimized
+
+---
+
+### **Rust**
+
+```rust
+fn factorial(n: u32) -> u32 {
+    if n == 0 { 1 } else { n * factorial(n-1) }
+}
+```
+
+* Pure FP style possible
+* Mutable variables not needed
+
+---
+
+### **C++**
+
+```cpp
+int factorial(int n) {
+    if(n == 0) return 1;
+    return n * factorial(n-1);
+}
+```
+
+* Functional style possible, but C++ defaults are mutable
+
+---
+
+# 4️⃣ Chaining / pipeline
+
+### **Haskell**
+
+```haskell
+let result = [1..10] |> map (^2) |> filter even |> sort
+```
+
+* Can chain functions naturally (`.` or `|>` operators)
+
+---
+
+### **Scala**
+
+```scala
+val result = (1 to 10).map(x => x*x).filter(_ % 2 == 0).sorted
+```
+
+* Chaining is natural with collections
+
+---
+
+### **Rust**
+
+```rust
+let result: Vec<i32> = (1..=10)
+    .map(|x| x*x)
+    .filter(|x| x % 2 == 0)
+    .collect::<Vec<_>>();
+```
+
+* `iter()` or range-based iterator pipelines
+* Returns new collections, immutable externally
+
+---
+
+### **C++**
+
+```cpp
+std::vector<int> xs = {1,2,3,4,5,6,7,8,9,10};
+std::vector<int> squares(xs.size());
+std::transform(xs.begin(), xs.end(), squares.begin(), [](int x){ return x*x; });
+std::vector<int> evens;
+std::copy_if(squares.begin(), squares.end(), std::back_inserter(evens), [](int x){ return x%2==0; });
+std::sort(evens.begin(), evens.end());
+```
+
+* Achievable, but verbose, lots of explicit containers
+* No built-in chaining syntax
+
+---
+
+# ✅ Key observations
+
+1. **Haskell** – pure, immutable, lazy, closest to lambda calculus
+2. **Scala** – can be pure FP, but default eager and hybrid with objects
+3. **Rust** – supports FP pipelines, immutability, ownership ensures safe chaining
+4. **C++** – can emulate FP, but verbose and mutable by default
+
+---
+
+If you like, I can also make a **diagram showing ownership, mutability, and chaining** across all four languages — visually comparing **immutable vs mutable pipelines**.
+
+Do you want me to do that?
