@@ -1,0 +1,26 @@
+? C:\Users\Prokash_Sinha\AppData\Local\Programs\stack\x86_64-windows\ghc-9.6.4\lib\x86_64-windows-ghc-9.6.4\rts-1.0.2\include\ghcversion.h
+: hash: cbc0ab805e5b827180e3116cecd3f6665988df7f45a6b64f0e09ea8c25c438ff
+D:\hello-haskell\.stack-work\dist\ab060f89\build\autogen\Paths_hello_haskell.hs:
+  hash: 5e93fe63ade0c3cbe627b10c4e5b95e1fdebe3a11682cf9eba0c4b3b9f1f4002
+D:\hello-haskell\.stack-work\dist\ab060f89\build\autogen\cabal_macros.h:
+  hash: b857cc2c98ce61f958163958ba16c7d85b313d3fae958109983accf00e99755a
+D:\hello-haskell\hello-haskell.cabal:
+  hash: 0ecc3ec77f96b5b041a401334ef9648e881809edd25a5467086ae17952ae6c99
+D:\hello-haskell\package.yaml:
+  hash: 6de3a051c5189aa6eab849d652c979206e915dbd704697e8e574bdb451855c01
+D:\hello-haskell\src\BinarySearchTree.hs:
+  hash: a0ac7008da574c3a7bb38ab9d8aa518509389ca8180ec07d4aa732556e269cc1
+D:\hello-haskell\src\BinaryTree.hs:
+  hash: 92526c46542bd3d2f513824d0d64e7c29e4c58fbe959afcf2c5a760ff7ad7ada
+D:\hello-haskell\src\Chapter1.hs:
+  hash: de2c858cf500b82a192691c0e1e2a539cce49b1727e9e8520fefa82cc653f932
+D:\hello-haskell\src\Chapter3.hs:
+  hash: c830924fb31540eb34902bcc5407424fcdb7da6810b760da6ba5c648de0fb163
+D:\hello-haskell\src\Chapter4.hs:
+  hash: 123cc84a1443fec2d4a3c3bc97b6671f725299f6c94ac5e3c6cc2edde2a16330
+D:\hello-haskell\src\Lib.hs:
+  hash: 24c0f190c9158426b6c45c2720f36901244636007bcfdeff964896e36d24ea6d
+D:\hello-haskell\src\MathUtils.hs:
+  hash: e4204880db0a7f3ce5a443236d2a4863208593998b601a09e4babd806b941dbd
+D:\hello-haskell\src\TextUtils.hs:
+  hash: a89c552fdbf976487a7ee02394430893f4259db01af89d1b9660ef1e4e80c2e6
