@@ -1,0 +1,12 @@
+? C:\Users\Prokash_Sinha\AppData\Local\Programs\stack\x86_64-windows\ghc-9.6.4\lib\x86_64-windows-ghc-9.6.4\rts-1.0.2\include\ghcversion.h
+: hash: cbc0ab805e5b827180e3116cecd3f6665988df7f45a6b64f0e09ea8c25c438ff
+D:\hello-haskell\.stack-work\dist\ab060f89\build\hello-haskell-exe\autogen\Paths_hello_haskell.hs:
+  hash: 1fda11506aa2195e6f185b4a040903252c8813812a4f2818f7cc61d70cd0e4d5
+D:\hello-haskell\.stack-work\dist\ab060f89\build\hello-haskell-exe\autogen\cabal_macros.h:
+  hash: 658be8eb30a1c99255793ecbdd330a7d31eeaa207cc84ab96bf822508c213311
+D:\hello-haskell\app\Main.hs:
+  hash: aee678c9b82ed47c0632cb3ffdd4b2f6784447956b085c3c8a258be8e36e2b5e
+D:\hello-haskell\hello-haskell.cabal:
+  hash: 0ecc3ec77f96b5b041a401334ef9648e881809edd25a5467086ae17952ae6c99
+D:\hello-haskell\package.yaml:
+  hash: 6de3a051c5189aa6eab849d652c979206e915dbd704697e8e574bdb451855c01
