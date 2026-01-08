@@ -1,0 +1,26 @@
+name: hello-haskell
+version: 0.1.0.0
+
+dependencies:
+  - base >= 4.18 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+    - base >= 4.18 && < 5
+    - array
+
+executables:
+  hello-haskell-exe:
+    main: Main.hs
+    source-dirs: app
+    dependencies:
+      - hello-haskell
+
+tests:
+  hello-haskell-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - hello-haskell
+      - hspec

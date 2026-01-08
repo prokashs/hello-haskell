@@ -1,0 +1,52 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.37.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           hello-haskell
+version:        0.1.0.0
+build-type:     Simple
+
+library
+  exposed-modules:
+      BinarySearchTree
+      BinaryTree
+      Chapter1
+      Chapter3
+      Chapter4
+      Lib
+      MathUtils
+      TextUtils
+  other-modules:
+      Paths_hello_haskell
+  hs-source-dirs:
+      src
+  build-depends:
+      array
+    , base >=4.18 && <5
+  default-language: Haskell2010
+
+executable hello-haskell-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_hello_haskell
+  hs-source-dirs:
+      app
+  build-depends:
+      base >=4.18 && <5
+    , hello-haskell
+  default-language: Haskell2010
+
+test-suite hello-haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_hello_haskell
+  hs-source-dirs:
+      test
+  build-depends:
+      base >=4.18 && <5
+    , hello-haskell
+    , hspec
+  default-language: Haskell2010
